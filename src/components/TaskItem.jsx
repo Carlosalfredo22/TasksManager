@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 
 const TaskItem = ({ task, onComplete, onDelete, onUpdateTitle }) => {
   const [editMode, setEditMode] = useState(false);
@@ -17,51 +18,79 @@ const TaskItem = ({ task, onComplete, onDelete, onUpdateTitle }) => {
   };
 
   return (
-    <div style={{
-      border: '1px solid #ccc',
-      borderRadius: '5px',
-      padding: '8px',
-      marginBottom: '10px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1 }}>
-        <input
-          type="checkbox"
-          checked={task.completed}
-          onChange={e => onComplete(task.id, e.target.checked)}
-        />
-
-        {editMode ? (
+    <motion.div
+      layout
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 20 }}
+      className={`card mb-2 ${task.completed ? 'bg-light' : ''}`}
+    >
+      <div className="card-body d-flex align-items-center justify-content-between">
+        <div className="d-flex align-items-center flex-grow-1 me-3">
           <input
-            type="text"
-            value={newTitle}
-            onChange={e => setNewTitle(e.target.value)}
-            style={{ flex: 1 }}
+            className="form-check-input me-3"
+            type="checkbox"
+            checked={task.completed}
+            onChange={e => onComplete(task.id, e.target.checked)}
           />
-        ) : (
-          <span style={{
-            textDecoration: task.completed ? 'line-through' : 'none',
-            flex: 1
-          }}>
-            {task.title}
-          </span>
-        )}
-      </div>
 
-      <div style={{ display: 'flex', gap: '5px' }}>
-        {editMode ? (
-          <>
-            <button onClick={handleSave}>Guardar</button>
-            <button onClick={handleCancel}>Cancelar</button>
-          </>
-        ) : (
-          <button onClick={() => setEditMode(true)}>Editar</button>
-        )}
-        <button onClick={() => onDelete(task.id)}>Eliminar</button>
+          {editMode ? (
+            <input
+              type="text"
+              className="form-control"
+              value={newTitle}
+              onChange={e => setNewTitle(e.target.value)}
+              autoFocus
+            />
+          ) : (
+            <span
+              className={`flex-grow-1 ${
+                task.completed ? 'text-decoration-line-through text-muted' : ''
+              }`}
+            >
+              {task.title}
+            </span>
+          )}
+        </div>
+
+        <div>
+          {editMode ? (
+            <>
+              <button
+                className="btn btn-sm btn-success me-2"
+                onClick={handleSave}
+                type="button"
+              >
+                Guardar
+              </button>
+              <button
+                className="btn btn-sm btn-secondary me-2"
+                onClick={handleCancel}
+                type="button"
+              >
+                Cancelar
+              </button>
+            </>
+          ) : (
+            <button
+              className="btn btn-sm btn-outline-primary me-2"
+              onClick={() => setEditMode(true)}
+              type="button"
+            >
+              Editar
+            </button>
+          )}
+
+          <button
+            className="btn btn-sm btn-outline-danger"
+            onClick={() => onDelete(task.id)}
+            type="button"
+          >
+            Eliminar
+          </button>
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

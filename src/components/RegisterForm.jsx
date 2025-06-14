@@ -19,18 +19,56 @@ const RegisterForm = () => {
   };
 
   return (
-    <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-      <input value={name} onChange={e => setName(e.target.value)} placeholder="Nombre" />
-      <input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" />
-      <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Contraseña" />
+    <form onSubmit={handleRegister} className="p-4 shadow rounded bg-white">
+      <h2 className="text-center mb-4">Registro</h2>
 
-      <button type="submit">Registrarse</button>
+      <div className="mb-3">
+        <label className="form-label">Nombre</label>
+        <input
+          type="text"
+          className="form-control"
+          value={name}
+          onChange={e => setName(e.target.value)}
+          placeholder="Ingresa tu nombre"
+          required
+        />
+      </div>
 
-      <Link to="/" style={{ textAlign: 'center', marginTop: '10px' }}>
-        <button type="button" style={{ padding: '0.5rem 1rem' }}>
-          Volver al Login
+      <div className="mb-3">
+        <label className="form-label">Correo electrónico</label>
+        <input
+          type="email"
+          className="form-control"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          placeholder="Ingresa tu email"
+          required
+        />
+      </div>
+
+      <div className="mb-3">
+        <label className="form-label">Contraseña</label>
+        <input
+          type="password"
+          className="form-control"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          placeholder="Crea una contraseña"
+          required
+        />
+      </div>
+
+      <div className="d-grid mb-3">
+        <button type="submit" className="btn btn-success">
+          Registrarse
         </button>
-      </Link>
+      </div>
+
+      <div className="text-center">
+        <Link to="/" className="btn btn-outline-secondary">
+          Volver al Login
+        </Link>
+      </div>
     </form>
   );
 };

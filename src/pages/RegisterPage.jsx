@@ -2,9 +2,10 @@ import RegisterForm from '../components/RegisterForm';
 
 const RegisterPage = () => {
   return (
-    <div style={{ maxWidth: '400px', margin: 'auto', padding: '2rem' }}>
-      <h1 style={{ textAlign: 'center' }}>Registrarse</h1>
-      <RegisterForm />
+    <div className="container-fluid d-flex justify-content-center align-items-center min-vh-100 bg-light">
+      <div className="w-100" style={{ maxWidth: '500px' }}>
+        <RegisterForm />
+      </div>
     </div>
   );
 };

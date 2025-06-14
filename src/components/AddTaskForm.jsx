@@ -6,15 +6,23 @@ const AddTaskForm = ({ onAdd }) => {
   const handleSubmit = e => {
     e.preventDefault();
     if (title.trim()) {
-      onAdd(title);
+      onAdd(title.trim());
       setTitle('');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Nueva tarea" />
-      <button type="submit">Añadir</button>
+    <form onSubmit={handleSubmit} className="d-flex mb-4">
+      <input
+        type="text"
+        className="form-control me-2"
+        placeholder="Nueva tarea"
+        value={title}
+        onChange={e => setTitle(e.target.value)}
+      />
+      <button type="submit" className="btn btn-primary">
+        Añadir
+      </button>
     </form>
   );
 };

@@ -4,34 +4,40 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem('token'); // elimina token
-    navigate('/'); // redirige a login
+    localStorage.removeItem('token');
+    navigate('/');
   };
 
   const token = localStorage.getItem('token');
 
   return (
-    <nav style={{
-      padding: '1rem',
-      backgroundColor: '#f0f0f0',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center'
-    }}>
-      <div>
-        <Link to="/tasks" style={{ marginRight: '15px' }}>Tareas</Link>
-      </div>
+    <nav className="navbar navbar-expand-lg navbar-light bg-light px-4">
+      <div className="container-fluid">
+        <Link className="navbar-brand" to="/tasks">
+          MyTasks
+        </Link>
 
-      {token ? (
-        <button onClick={handleLogout} style={{ cursor: 'pointer' }}>
-          Logout
-        </button>
-      ) : (
-        <>
-          <Link to="/" style={{ marginRight: '10px' }}>Login</Link>
-          <Link to="/register">Registrarse</Link>
-        </>
-      )}
+        <div className="collapse navbar-collapse justify-content-end">
+          {token ? (
+            <button
+              onClick={handleLogout}
+              className="btn btn-outline-danger"
+              type="button"
+            >
+              Logout
+            </button>
+          ) : (
+            <>
+              <Link to="/" className="btn btn-outline-primary me-2">
+                Login
+              </Link>
+              <Link to="/register" className="btn btn-primary">
+                Registrarse
+              </Link>
+            </>
+          )}
+        </div>
+      </div>
     </nav>
   );
 };
