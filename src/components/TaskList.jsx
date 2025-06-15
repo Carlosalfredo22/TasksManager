@@ -2,9 +2,6 @@ import TaskItem from './TaskItem';
 import { AnimatePresence } from 'framer-motion';
 
 const TaskList = ({ tasks, onComplete, onDelete, onUpdateTitle }) => {
-  if (tasks.length === 0) {
-    return <p className="text-center">No hay tareas disponibles.</p>;
-  }
 
   return (
     <div>

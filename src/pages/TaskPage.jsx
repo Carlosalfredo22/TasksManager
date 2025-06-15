@@ -8,14 +8,16 @@ const TaskPage = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [message, setMessage] = useState(null);
 
   const loadTasks = async () => {
     setLoading(true);
     setError(null);
     try {
       const res = await api.get('/tasks');
+      console.log('Tareas recibidas:', res.data);
       setTasks(res.data);
-    } catch {
+    } catch (e) {
       setError('Error al cargar las tareas.');
     } finally {
       setLoading(false);
@@ -26,8 +28,11 @@ const TaskPage = () => {
     try {
       const res = await api.post('/tasks', { title });
       setTasks(prev => [...prev, res.data]);
+      setMessage('¡Has creado una nueva tarea con éxito!');
+      setTimeout(() => setMessage(null), 3000);
     } catch {
-      alert('Error al añadir la tarea');
+      setError('Error al añadir la tarea');
+      setTimeout(() => setError(null), 3000);
     }
   };
 
@@ -36,7 +41,8 @@ const TaskPage = () => {
       await api.put(`/tasks/${id}`, { completed });
       setTasks(tasks.map(t => (t.id === id ? { ...t, completed } : t)));
     } catch {
-      alert('Error al actualizar el estado');
+      setError('Error al actualizar el estado');
+      setTimeout(() => setError(null), 3000);
     }
   };
 
@@ -46,7 +52,8 @@ const TaskPage = () => {
       await api.delete(`/tasks/${id}`);
       setTasks(tasks.filter(t => t.id !== id));
     } catch {
-      alert('Error al eliminar la tarea');
+      setError('Error al eliminar la tarea');
+      setTimeout(() => setError(null), 3000);
     }
   };
 
@@ -55,7 +62,8 @@ const TaskPage = () => {
       const res = await api.put(`/tasks/${id}`, { title });
       setTasks(tasks.map(t => (t.id === id ? res.data : t)));
     } catch {
-      alert('Error al actualizar el título');
+      setError('Error al actualizar el título');
+      setTimeout(() => setError(null), 3000);
     }
   };
 
@@ -68,11 +76,24 @@ const TaskPage = () => {
       <Navbar />
       <h2 className="mb-4 text-center">Mis Tareas</h2>
 
-      <AddTaskForm onAdd={addTask} />
+      {/* Mensaje de éxito */}
+      {message && <div className="alert alert-success">{message}</div>}
 
-      {loading && <div className="alert alert-info">Cargando tareas...</div>}
+      {/* Mensaje de error */}
       {error && <div className="alert alert-danger">{error}</div>}
 
+      {/* Formulario para agregar tarea */}
+      <AddTaskForm onAdd={addTask} />
+
+      {/* Mensaje de carga justo aquí debajo del formulario */}
+      {loading && <div className="alert alert-info mt-3">Cargando tareas...</div>}
+
+      {/* Mostrar "no hay tareas" solo si no hay error ni loading */}
+      {!loading && !error && tasks.length === 0 && (
+        <div className="alert alert-warning mt-3">No hay tareas disponibles.</div>
+      )}
+
+      {/* Lista de tareas */}
       <TaskList
         tasks={tasks}
         onComplete={completeTask}
@@ -84,4 +105,3 @@ const TaskPage = () => {
 };
 
 export default TaskPage;
-

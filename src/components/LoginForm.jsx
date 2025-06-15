@@ -6,21 +6,26 @@ const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async e => {
     e.preventDefault();
+    setError('');
+    setLoading(true);
     try {
       const res = await api.post('/auth/login', { email, password });
       localStorage.setItem('token', res.data.access_token);
       navigate('/tasks');
     } catch (err) {
       setError('Credenciales incorrectas');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 shadow rounded bg-white">
+    <form onSubmit={handleSubmit} className="p-4 shadow rounded bg-white" style={{ maxWidth: 400, margin: 'auto' }}>
       <h2 className="text-center mb-4">Iniciar Sesión</h2>
 
       {error && <div className="alert alert-danger text-center">{error}</div>}
@@ -34,6 +39,7 @@ const LoginForm = () => {
           onChange={e => setEmail(e.target.value)}
           placeholder="Ingresa tu email"
           required
+          disabled={loading}
         />
       </div>
 
@@ -46,12 +52,20 @@ const LoginForm = () => {
           onChange={e => setPassword(e.target.value)}
           placeholder="Ingresa tu contraseña"
           required
+          disabled={loading}
         />
       </div>
 
       <div className="d-grid">
-        <button type="submit" className="btn btn-primary">
-          Entrar
+        <button type="submit" className="btn btn-primary" disabled={loading}>
+          {loading ? (
+            <>
+              <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              Entrando...
+            </>
+          ) : (
+            'Entrar'
+          )}
         </button>
       </div>
 
@@ -63,3 +77,4 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
+
