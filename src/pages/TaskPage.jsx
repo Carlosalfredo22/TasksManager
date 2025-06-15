@@ -71,9 +71,20 @@ const TaskPage = () => {
     loadTasks();
   }, []);
 
+  function roles() {
+    // Obtener los roles del localStorage
+    const roles = localStorage.getItem('roles');
+    return roles ? JSON.parse(roles) : [];
+  }
+
   return (
     <div className="container mt-4" style={{ maxWidth: 700 }}>
       <Navbar />
+      {roles().includes('admin') && (
+        <div className="alert alert-info">
+          Eres un administrador. Puedes gestionar todas las tareas.
+        </div>
+      )}
       <h2 className="mb-4 text-center">Mis Tareas</h2>
 
       {/* Mensaje de éxito */}

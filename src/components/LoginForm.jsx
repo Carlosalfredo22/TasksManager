@@ -16,6 +16,7 @@ const LoginForm = () => {
     try {
       const res = await api.post('/auth/login', { email, password });
       localStorage.setItem('token', res.data.access_token);
+      localStorage.setItem('roles', JSON.stringify(res.data.roles));
       navigate('/tasks');
     } catch (err) {
       setError('Credenciales incorrectas');
