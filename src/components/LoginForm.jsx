@@ -1,13 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../service/api';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Mostrar mensaje de éxito si viene del registro
+  useEffect(() => {
+    if (location.state?.success) {
+      setSuccessMessage(location.state.success);
+      // Borrar el mensaje después de 4 segundos
+      const timer = setTimeout(() => setSuccessMessage(''), 4000);
+      return () => clearTimeout(timer); // limpiar el timer si cambia de página
+    }
+  }, [location.state]);
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -29,7 +41,12 @@ const LoginForm = () => {
     <form onSubmit={handleSubmit} className="p-4 shadow rounded bg-white" style={{ maxWidth: 400, margin: 'auto' }}>
       <h2 className="text-center mb-4">Iniciar Sesión</h2>
 
-      {error && <div className="alert alert-danger text-center">{error}</div>}
+      {successMessage && (
+        <div className="alert alert-success text-center">{successMessage}</div>
+      )}
+      {error && (
+        <div className="alert alert-danger text-center">{error}</div>
+      )}
 
       <div className="mb-3">
         <label className="form-label">Correo electrónico</label>
@@ -78,4 +95,3 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
-
